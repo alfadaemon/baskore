@@ -1,0 +1,154 @@
+.navbar-fixed-top{style: "background-color:black;"}
+  .row
+    .col-md-4
+      %center
+        .teams_name=@game.home.name
+      .well-md
+        .row
+          .col-md-12
+            %center
+              .score#score_home 00
+        .row
+          .col-md-6
+            %center.dashboard_labels
+              T.O.L.
+              .indicator_small 0
+          .col-md-6
+            %center.dashboard_labels
+              Fouls
+              .indicator_small 0
+    .col-md-4
+      %center
+        .row
+          .col-md-3.col-md-offset-4
+            %center
+              .teams_name Period:
+          .col-md-1
+            %center
+              .indicator_small#period 1
+        .row
+          .col-md-12
+            %center
+              .clock#clock 00:00
+        .row
+          .col-md-2
+            %center
+              %span
+                %a.dashboard_indicator_on.glyphicon.glyphicon-arrow-left
+          .col-md-2
+            %center
+              .dashboard_labels Poss
+          .col-md-2
+            %center
+              %span
+                %a.dashboard_indicator_off.glyphicon.glyphicon-arrow-right
+          .col-md-2
+            %center
+              %span
+                %a.dashboard_indicator_on.glyphicon.glyphicon-arrow-left
+          .col-md-2
+            %center
+              .dashboard_labels Bonus
+          .col-md-2
+            %center
+              %span
+                %a.dashboard_indicator_off.glyphicon.glyphicon-arrow-right
+    .col-md-4
+      %center
+        .teams_name=@game.visit.name
+      .well-md
+        .row
+          .col-md-12
+            %center
+              .score#score_visit 00
+        .row
+          .col-md-6
+            %center.dashboard_labels
+              T.O.L.
+              .indicator_small 0
+          .col-md-6
+            %center.dashboard_labels
+              Fouls
+              .indicator_small 0
+.container-fluid{style: "background-color: black; margin-top: 120px;"}
+  .row
+    .col-md-6#home_players_in
+      - player_count = 0
+      - @game.home.players.each do |player|
+        - if player_count <5
+          .row.player_well
+            .col-md-3.col-md-offset-1.player_stat
+              .player_number
+                %input.player_number{size:2, style:"background-color:black"}
+              %br
+              .player_name= player.name
+            .col-md-4.player_stat
+              .row
+                .col-md-2.btn-toolbar{role: 'toolbar'}
+                  .btn-group-sm{role: 'group'}
+                    %button.btn.btn-default F-
+                    %button.btn.btn-default -2
+                    %button.btn.btn-default -3
+                .col-md-6
+                  %center
+                    .dashboard_labels
+                      %center
+                        Points
+                        .player_points 0
+                .col-md-2.btn-toolbar
+                  .btn-group-sm{role: 'group'}
+                    %button.btn.btn-default F+
+                    %button.btn.btn-default +2
+                    %button.btn.btn-default +3
+            .col-md-3.player_stat
+              .row
+                .col-md-2
+                  %button -1
+                .col-md-6
+                  .dashboard_labels
+                    %center
+                      Fouls
+                      .player_points 0
+                .col-md-2
+                  %button +1
+          - player_count+=1
+    .col-md-6#visit_players_in
+      - player_count = 0
+      - @game.visit.players.each do |player|
+        - if player_count <5
+          .row.player_well
+            .col-md-3.col-md-offset-1.player_stat
+              .player_number
+                %input.player_number{size:2, style:"background-color:black"}
+              %br
+              .player_name= player.name
+            .col-md-4.player_stat
+              .row
+                .col-md-2.btn-toolbar{role: 'toolbar'}
+                  .btn-group-sm{role: 'group'}
+                    %button.btn.btn-default F-
+                    %button.btn.btn-default -2
+                    %button.btn.btn-default -3
+                .col-md-6
+                  %center
+                    .dashboard_labels
+                      %center
+                        Points
+                        .player_points 0
+                .col-md-2.btn-toolbar
+                  .btn-group-sm{role: 'group'}
+                    %button.btn.btn-default F+
+                    %button.btn.btn-default +2
+                    %button.btn.btn-default +3
+            .col-md-3.player_stat
+              .row
+                .col-md-2
+                  %button -1
+                .col-md-6
+                  .dashboard_labels
+                    %center
+                      Fouls
+                      .player_points 0
+                .col-md-2
+                  %button +1
+          - player_count+=1

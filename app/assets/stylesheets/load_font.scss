@@ -6,11 +6,15 @@
 }
 
 @font-face {
+  font-family: 'DigitalClock';
+  src: url('digital2.ttf') format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'Led';
   src: url('led.ttf') format("truetype");
   font-weight: normal;
   font-style: normal;
 }
-
-h1, th {font-family: 'Digital'}
-tr, a {font-family: 'Led'; font-size: 1em}

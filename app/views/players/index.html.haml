@@ -1,0 +1,27 @@
+%h1 Listing players
+
+%table.table.table-responsive.table-striped.table-bordered
+  %thead.header-table
+    %tr
+      %th Name
+      %th Active
+      %th Team
+      %th Tournament
+      %th
+      %th
+      %th
+
+  %tbody
+    - @players.each do |player|
+      %tr
+        %td= player.name
+        %td= player.active
+        %td= player.team.name
+        %td= player.team.tournament.name
+        %td= link_to 'Show', player
+        %td= link_to 'Edit', edit_player_path(player)
+        %td= link_to 'Destroy', player, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Player', new_player_path

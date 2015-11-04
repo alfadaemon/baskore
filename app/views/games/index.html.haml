@@ -1,6 +1,6 @@
 %h1 Listing games
 
-%table.table.table-responsive.table-striped
+%table.table.table-responsive.table-striped.table-bordered
   %thead.header-table
     %tr
       %th Name
@@ -22,7 +22,7 @@
         %td= game.game_date
         %td= game.home_score
         %td= game.visit_score
-        %td= link_to 'Show', game
+        %td= link_to 'Show', game_dashboard_path(game.id)
         %td= link_to 'Edit', edit_game_path(game)
         %td= link_to 'Destroy', game, :method => :delete, :data => { :confirm => 'Are you sure?' }
 

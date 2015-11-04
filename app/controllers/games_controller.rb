@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   before_action :set_game, only: [:show, :edit, :update, :destroy]
+  layout 'ingame', only: [:dashboard]
 
   # GET /games
   # GET /games.json
@@ -59,6 +60,10 @@ class GamesController < ApplicationController
       format.html { redirect_to games_url, notice: 'Game was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def dashboard
+    @game = Game.find(params[:id])
   end
 
   private

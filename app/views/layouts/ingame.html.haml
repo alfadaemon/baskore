@@ -1,0 +1,11 @@
+!!!
+%html
+  %head
+    %title Baskore - Game:
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  %body{style:"line-height:1"}
+    %p.notice= notice
+    %p.alert= alert
+    = yield

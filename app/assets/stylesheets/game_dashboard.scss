@@ -1,0 +1,17 @@
+h1, th {font-family: 'Digital'}
+tr, a, .control-label {font-family: 'Led'; font-size: 1em}
+
+.dashboard_labels {font-family: 'Led'; font-size: 1.3em; color:white}
+.dashboard_indicator_off {font-size: 1em; color:darkgreen}
+.dashboard_indicator_on {font-size: 1em; color:greenyellow}
+
+.clock {font-family: "DigitalClock"; font-size: 6em; color:red; font-weight: bold}
+.indicator_small {font-family: "Led"; font-size: 2em; color:red; font-weight: bold}
+.score{font-family: "DigitalClock"; font-size: 6em; color:green}
+
+.teams_name {font-family: 'Led'; font-size: 1.6em; color:white; font-weight: bold}
+.player_well {border: solid; border-color: yellow; border-width: 2px; border-radius: 3%; padding: 2px 0px 2px 0px;}
+.player_stat {border: solid; border-color: white; border-width: 1px}
+.player_number {font-family: 'DigitalClock'; font-size: 2em; color:greenyellow; text-align: center}
+.player_points {font-family: 'DigitalClock'; font-size: 4em; color:yellow; text-align: center}
+.player_name {font-family: 'Led'; font-size: 1em; color:white; text-align: center}
