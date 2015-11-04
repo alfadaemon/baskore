@@ -1,3 +1,15 @@
+GIT
+  remote: git://github.com/activerecord-hackery/ransack.git
+  revision: d9f516f9185cf7eb7c9853a942493460e304857e
+  branch: rails-4.2
+  specs:
+    ransack (1.2.4)
+      actionpack (~> 4.2.0)
+      activerecord (~> 4.2.0)
+      activesupport (~> 4.2.0)
+      i18n
+      polyamorous (~> 1.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -213,12 +225,6 @@ GEM
       thor (>= 0.18.1, < 2.0)
     raindrops (0.15.0)
     rake (10.4.2)
-    ransack (1.7.0)
-      actionpack (>= 3.0)
-      activerecord (>= 3.0)
-      activesupport (>= 3.0)
-      i18n
-      polyamorous (~> 1.2)
     rb-fchange (0.0.6)
       ffi
     rb-fsevent (0.9.6)
@@ -345,6 +351,7 @@ DEPENDENCIES
   rails_apps_pages
   rails_apps_testing
   rails_layout
+  ransack!
   rb-fchange
   rb-fsevent
   rb-inotify

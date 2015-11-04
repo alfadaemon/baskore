@@ -48,6 +48,8 @@ gem 'devise'
 gem 'haml-rails'
 gem 'pundit'
 gem 'simple_form'
+
+gem 'ransack', github: 'activerecord-hackery/ransack', branch: 'rails-4.2'
 gem 'upmin-admin'
 
 group :development do

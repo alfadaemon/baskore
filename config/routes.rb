@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount Upmin::Engine => '/admin'
+
   resources :games
 
   resources :rounds
