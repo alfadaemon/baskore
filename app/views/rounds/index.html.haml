@@ -1,0 +1,27 @@
+%h1 Listing rounds
+
+%table.table.table-responsive.table-striped
+  %thead.header-table
+    %tr
+      %th Name
+      %th Position
+      %th Tournament
+      %th League
+      %th
+      %th
+      %th
+
+  %tbody
+    - @rounds.each do |round|
+      %tr
+        %td= round.name
+        %td= round.position
+        %td= round.tournament.name
+        %td= round.tournament.league.name
+        %td= link_to 'Show', round
+        %td= link_to 'Edit', edit_round_path(round)
+        %td= link_to 'Destroy', round, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Round', new_round_path

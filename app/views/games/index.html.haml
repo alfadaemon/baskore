@@ -1,0 +1,31 @@
+%h1 Listing games
+
+%table.table.table-responsive.table-striped
+  %thead.header-table
+    %tr
+      %th Name
+      %th Home
+      %th Visit
+      %th Game date
+      %th Home score
+      %th Visit score
+      %th
+      %th
+      %th
+
+  %tbody
+    - @games.each do |game|
+      %tr
+        %td= game.name
+        %td= game.home.name
+        %td= game.visit.name
+        %td= game.game_date
+        %td= game.home_score
+        %td= game.visit_score
+        %td= link_to 'Show', game
+        %td= link_to 'Edit', edit_game_path(game)
+        %td= link_to 'Destroy', game, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Game', new_game_path

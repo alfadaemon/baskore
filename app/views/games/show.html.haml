@@ -1,0 +1,24 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @game.name
+%p
+  %b Home:
+  = @game.home.name
+%p
+  %b Visit:
+  = @game.visit.name
+%p
+  %b Game date:
+  = @game.game_date
+%p
+  %b Home score:
+  = @game.home_score
+%p
+  %b Visit score:
+  = @game.visit_score
+
+= link_to 'Edit', edit_game_path(@game)
+\|
+= link_to 'Back', games_path

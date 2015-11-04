@@ -1,0 +1,22 @@
+%h1 Listing leagues
+
+%table.table.table-responsive.table-striped
+  %thead.header-table
+    %tr
+      %th Name
+      %th City
+      %th
+      %th
+      %th
+
+  %tbody
+    - @leagues.each do |league|
+      %tr
+        %td= league.name
+        %td= league.city
+        %td= link_to 'Show', league
+        %td= link_to 'Edit', edit_league_path(league)
+        %td= link_to 'Destroy', league, :method => :delete, :data => { :confirm => 'Are you sure?' }
+%br
+
+= link_to 'New League', new_league_path

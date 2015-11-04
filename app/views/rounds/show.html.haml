@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @round.name
+%p
+  %b Position:
+  = @round.position
+%p
+  %b Tournament:
+  = @round.tournament.name
+
+= link_to 'Edit', edit_round_path(@round)
+\|
+= link_to 'Back', rounds_path
