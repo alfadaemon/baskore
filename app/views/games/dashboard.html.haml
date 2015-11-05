@@ -9,27 +9,47 @@
             %center
               .score#score_home 00
         .row
-          .col-md-6
+          .col-md-2
             %center.dashboard_labels
-              T.O.L.
+              T.O.L.:
+          .col-md-1
+            %center
               .indicator_small 0
-          .col-md-6
+          .col-md-3
+            .btn-group-xs
+              %button.btn.btn-default -
+              %button.btn.btn-default +
+          .col-md-2
             %center.dashboard_labels
-              Fouls
+              Fouls:
+          .col-md-1
+            %center
               .indicator_small 0
     .col-md-4
       %center
         .row
-          .col-md-3.col-md-offset-4
+          .col-md-3.col-md-offset-3
             %center
               .teams_name Period:
           .col-md-1
             %center
-              .indicator_small#period 1
+              .indicator_small
+                #period 1
+          .col-md-2
+            .btn-group-xs
+              %button.btn.btn-default.minus_period -
+              %button.btn.btn-default.plus_period +
         .row
           .col-md-12
-            %center
-              .clock#clock 00:00
+            .clock#timer 10:00
+            %button.minus_sec
+              %span.glyphicon.glyphicon-step-backward
+            %button.play
+              %span.glyphicon.glyphicon-play
+            %button.pause
+              %span.glyphicon.glyphicon-pause
+            %button.plus_sec
+              %span.glyphicon.glyphicon-step-forward
         .row
           .col-md-2
             %center
@@ -60,95 +80,185 @@
         .row
           .col-md-12
             %center
-              .score#score_visit 00
+              .score#score_home 00
         .row
-          .col-md-6
+          .col-md-2
             %center.dashboard_labels
-              T.O.L.
+              T.O.L.:
+          .col-md-1
+            %center
               .indicator_small 0
-          .col-md-6
+          .col-md-3
+            .btn-group-xs
+              %button.btn.btn-default -
+              %button.btn.btn-default +
+          .col-md-2
             %center.dashboard_labels
-              Fouls
+              Fouls:
+          .col-md-1
+            %center
               .indicator_small 0
 .container-fluid{style: "background-color: black; margin-top: 120px;"}
   .row
     .col-md-6#home_players_in
       - player_count = 0
       - @game.home.players.each do |player|
-        - if player_count <5
-          .row.player_well
-            .col-md-3.col-md-offset-1.player_stat
-              .player_number
-                %input.player_number{size:2, style:"background-color:black"}
-              %br
-              .player_name= player.name
-            .col-md-4.player_stat
-              .row
-                .col-md-2.btn-toolbar{role: 'toolbar'}
-                  .btn-group-sm{role: 'group'}
-                    %button.btn.btn-default F-
-                    %button.btn.btn-default -2
-                    %button.btn.btn-default -3
-                .col-md-6
+        .row.player_well
+          .col-md-1
+            %button.dashboard_indicator_off.glyphicon.glyphicon-retweet
+          .col-md-4
+            .player_number
+              %input.player_number{size:2, style:"background-color:black"}
+            .player_name= player.name
+          .col-md-4
+            .row
+              .col-md-2.btn-group-vertical{role: 'group'}
+                .btn-group-xs
+                  %button.btn.btn-default -F
+                  %button.btn.btn-default -2
+                  %button.btn.btn-default -3
+              .col-md-5.col-md-offset-1
+                .dashboard_labels
                   %center
-                    .dashboard_labels
-                      %center
-                        Points
-                        .player_points 0
-                .col-md-2.btn-toolbar
-                  .btn-group-sm{role: 'group'}
-                    %button.btn.btn-default F+
-                    %button.btn.btn-default +2
-                    %button.btn.btn-default +3
-            .col-md-3.player_stat
-              .row
-                .col-md-2
-                  %button -1
-                .col-md-6
-                  .dashboard_labels
-                    %center
-                      Fouls
-                      .player_points 0
-                .col-md-2
-                  %button +1
-          - player_count+=1
+                    Points
+                    .player_points 0
+              .col-md-2.btn-group-vertical{role: 'group'}
+                .btn-group-xs
+                  %button.btn.btn-default +F
+                  %button.btn.btn-default +2
+                  %button.btn.btn-default +3
+          .col-md-3
+            .row
+              .col-md-2
+                %button -1
+              .col-md-5.col-md-offset-1
+                .dashboard_labels
+                  %center
+                    Fouls
+                    .player_fouls 0
+              .col-md-2
+                %button +1
     .col-md-6#visit_players_in
       - player_count = 0
       - @game.visit.players.each do |player|
-        - if player_count <5
-          .row.player_well
-            .col-md-3.col-md-offset-1.player_stat
-              .player_number
-                %input.player_number{size:2, style:"background-color:black"}
-              %br
-              .player_name= player.name
-            .col-md-4.player_stat
-              .row
-                .col-md-2.btn-toolbar{role: 'toolbar'}
-                  .btn-group-sm{role: 'group'}
-                    %button.btn.btn-default F-
-                    %button.btn.btn-default -2
-                    %button.btn.btn-default -3
-                .col-md-6
+        .row.player_well
+          .col-md-1
+            %button.dashboard_indicator_off.glyphicon.glyphicon-retweet
+          .col-md-4
+            .player_number
+              %input.player_number{size:2, style:"background-color:black"}
+            .player_name= player.name
+          .col-md-4
+            .row
+              .col-md-2.btn-toolbar{role: 'toolbar'}
+                .btn-group-xs{role: 'group'}
+                  %button.btn.btn-default -F
+                  %button.btn.btn-default -2
+                  %button.btn.btn-default -3
+              .col-md-5.col-md-offset-1
+                .dashboard_labels
                   %center
-                    .dashboard_labels
-                      %center
-                        Points
-                        .player_points 0
-                .col-md-2.btn-toolbar
-                  .btn-group-sm{role: 'group'}
-                    %button.btn.btn-default F+
-                    %button.btn.btn-default +2
-                    %button.btn.btn-default +3
-            .col-md-3.player_stat
-              .row
-                .col-md-2
-                  %button -1
-                .col-md-6
-                  .dashboard_labels
-                    %center
-                      Fouls
-                      .player_points 0
-                .col-md-2
-                  %button +1
-          - player_count+=1
+                    Points
+                    .player_points 0
+              .col-md-2.btn-toolbar
+                .btn-group-xs{role: 'group'}
+                  %button.btn.btn-default +F
+                  %button.btn.btn-default +2
+                  %button.btn.btn-default +3
+          .col-md-3
+            .row
+              .col-md-2
+                %button -1
+              .col-md-5.col-md-offset-1
+                .dashboard_labels
+                  %center
+                    Fouls
+                    .player_fouls 0
+              .col-md-2
+                %button +1
+
+:javascript
+  var count = 30;
+  var mins = 10; //Set the number of minutes you need
+  var secs = mins * 60;
+  var currentSeconds = 0;
+  var currentMinutes = 0;
+  var isPaused = true;
+  var currentPeriod = 1;
+  var homeFouls = 0;
+  var visitFouls = 0;
+  var homeTO = 0;
+  var vistiTO = 0;
+
+  var counter = setInterval(timer, 1000); //1000 will  run it every 1 second
+
+  function timer() {
+    if(!isPaused){
+      currentMinutes = Math.floor(secs / 60);
+      currentSeconds = secs % 60;
+      if (currentSeconds <= 9) currentSeconds = "0" + currentSeconds;
+      if (currentMinutes <= 9) currentMinutes = "0" + currentMinutes;
+      secs--;
+      document.getElementById("timer").innerHTML = currentMinutes + ":" + currentSeconds; //Set the element id you need the time put into.
+      if (secs < 0) {
+        clearInterval(counter);
+        alert("Done!");
+        return;
+      }
+    }
+  }
+
+  //with jquery
+  $('.pause').on('click', function(e) {
+    e.preventDefault();
+    isPaused = true;
+    $('.play').show();
+    $('.minus_sec').show();
+    $('.plus_sec').show();
+    $(this).hide();
+  });
+
+  $('.play').on('click', function(e) {
+    e.preventDefault();
+    isPaused = false;
+    $('.pause').show();
+    $('.minus_sec').hide();
+    $('.plus_sec').hide();
+    $(this).hide();
+  });
+
+  $('.minus_sec').on('click', function(e) {
+    e.preventDefault();
+    secs--;
+    currentMinutes = Math.floor(secs / 60);
+    currentSeconds = secs % 60;
+    if (currentSeconds <= 9) currentSeconds = "0" + currentSeconds;
+    if (currentMinutes <= 9) currentMinutes = "0" + currentMinutes;
+    document.getElementById("timer").innerHTML = currentMinutes + ":" + currentSeconds; //Set the element id you need the time put into.
+  });
+
+  $('.plus_sec').on('click', function(e) {
+    e.preventDefault();
+    secs++;
+    currentMinutes = Math.floor(secs / 60);
+    currentSeconds = secs % 60;
+    if (currentSeconds <= 9) currentSeconds = "0" + currentSeconds;
+    if (currentMinutes <= 9) currentMinutes = "0" + currentMinutes;
+    document.getElementById("timer").innerHTML = currentMinutes + ":" + currentSeconds; //Set the element id you need the time put into.
+  });
+
+  $('.plus_period').on('click', function(e) {
+    e.preventDefault();
+    currentPeriod++;
+    var cp = $('#period');
+    cp.text(currentPeriod);
+  });
+
+  $('.minus_period').on('click', function(e) {
+    e.preventDefault();
+    if(currentPeriod>=2){
+      currentPeriod--;
+      var cp = $('#period');
+      cp.text(currentPeriod);
+    }
+  });
