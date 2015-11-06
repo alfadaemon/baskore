@@ -43,13 +43,15 @@
           .col-md-12
             .clock#timer 10:00
             %button.minus_sec
-              %span.glyphicon.glyphicon-step-backward
-            %button.play
-              %span.glyphicon.glyphicon-play
+              %span.glyphicon.glyphicon-step-backward.controls
+            %button.play.controls
+              %span.glyphicon.glyphicon-play.controls
             %button.pause
-              %span.glyphicon.glyphicon-pause
+              %span.glyphicon.glyphicon-pause.controls
             %button.plus_sec
-              %span.glyphicon.glyphicon-step-forward
+              %span.glyphicon.glyphicon-step-forward.controls
+            %button.horn
+              %span.glyphicon.glyphicon-volume-up.controls
         .row
           .col-md-2
             %center
@@ -182,7 +184,7 @@
   var mins = 10; //Set the number of minutes you need
   var secs = mins * 60;
   var currentSeconds = 0;
-  var currentMinutes = 0;
+  var currentMinutes = 10;
   var isPaused = true;
   var currentPeriod = 1;
   var homeFouls = 0;
@@ -190,7 +192,23 @@
   var homeTO = 0;
   var vistiTO = 0;
 
+  var snd = new Audio("/sounds/buzzer.mp3"); // buffers automatically when created
+
   var counter = setInterval(timer, 1000); //1000 will  run it every 1 second
+
+  function resetClock(){
+    mins = 10; //Set the number of minutes you need
+    secs = mins * 60;
+    currentSeconds = 0;
+    currentMinutes = 10;
+    isPaused = true;
+    counter = setInterval(timer, 1000); //1000 will  run it every 1 second
+
+    if (currentSeconds <= 9) currentSeconds = "0" + currentSeconds;
+    if (currentMinutes <= 9) currentMinutes = "0" + currentMinutes;
+    document.getElementById("timer").innerHTML = currentMinutes + ":" + currentSeconds; //Set the element id you need the time put into.
+    $('.play').show();
+  }
 
   function timer() {
     if(!isPaused){
@@ -202,7 +220,9 @@
       document.getElementById("timer").innerHTML = currentMinutes + ":" + currentSeconds; //Set the element id you need the time put into.
       if (secs < 0) {
         clearInterval(counter);
-        alert("Done!");
+        snd.currentTime = 0;
+        snd.play();
+        resetClock();
         return;
       }
     }
@@ -229,12 +249,14 @@
 
   $('.minus_sec').on('click', function(e) {
     e.preventDefault();
-    secs--;
-    currentMinutes = Math.floor(secs / 60);
-    currentSeconds = secs % 60;
-    if (currentSeconds <= 9) currentSeconds = "0" + currentSeconds;
-    if (currentMinutes <= 9) currentMinutes = "0" + currentMinutes;
-    document.getElementById("timer").innerHTML = currentMinutes + ":" + currentSeconds; //Set the element id you need the time put into.
+    if(secs>=2){
+      secs--;
+      currentMinutes = Math.floor(secs / 60);
+      currentSeconds = secs % 60;
+      if (currentSeconds <= 9) currentSeconds = "0" + currentSeconds;
+      if (currentMinutes <= 9) currentMinutes = "0" + currentMinutes;
+      document.getElementById("timer").innerHTML = currentMinutes + ":" + currentSeconds; //Set the element id you need the time put into.
+    }
   });
 
   $('.plus_sec').on('click', function(e) {
@@ -262,3 +284,14 @@
       cp.text(currentPeriod);
     }
   });
+
+  $('.horn').on('click', function(e){
+    snd.currentTime = 6;
+    snd.play();
+    int = setInterval(function() {
+        if (snd.currentTime > 7) {
+            snd.pause();
+            clearInterval(int);
+        }
+    }, 10);
+  })
