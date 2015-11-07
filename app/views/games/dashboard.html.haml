@@ -7,7 +7,7 @@
         .row
           .col-md-12
             %center
-              .score#score_home 00
+              .score#score_home{'data-value'=>0} 00
         .row
           .col-md-2
             %center.dashboard_labels
@@ -24,7 +24,7 @@
               Fouls:
           .col-md-1
             %center
-              .indicator_small 0
+              #home_fouls.indicator_small 0
     .col-md-4
       %center
         .row
@@ -82,7 +82,7 @@
         .row
           .col-md-12
             %center
-              .score#score_home 00
+              .score#score_visit{'data-value'=>0} 00
         .row
           .col-md-2
             %center.dashboard_labels
@@ -99,7 +99,7 @@
               Fouls:
           .col-md-1
             %center
-              .indicator_small 0
+              #visit_fouls.indicator_small 0
 .container-fluid{style: "background-color: black; margin-top: 120px;"}
   .row
     .col-md-6#home_players_in
@@ -116,30 +116,34 @@
             .row
               .col-md-2.btn-group-vertical{role: 'group'}
                 .btn-group-xs
-                  %button.btn.btn-default -F
+                  %button.btn.btn-default.sub_points -F
                   %button.btn.btn-default -2
                   %button.btn.btn-default -3
               .col-md-5.col-md-offset-1
                 .dashboard_labels
                   %center
                     Points
-                    .player_points 0
+                    .player_points
+                      %div{'data-points'=> 0, id: "points_player_#{player.id}"} 0
               .col-md-2.btn-group-vertical{role: 'group'}
                 .btn-group-xs
-                  %button.btn.btn-default +F
-                  %button.btn.btn-default +2
-                  %button.btn.btn-default +3
+                  %button.btn.btn-default.add_points{'data-player-id'=> player.id, 'data-points'=> 1, 'data-courtside'=>'home'} +F
+                  %button.btn.btn-default.add_points{'data-player-id'=> player.id, 'data-points'=> 2, 'data-courtside'=>'home'} +2
+                  %button.btn.btn-default.add_points{'data-player-id'=> player.id, 'data-points'=> 3, 'data-courtside'=>'home'} +3
           .col-md-3
             .row
               .col-md-2
-                %button -1
+                .btn-group-xs
+                  %button.btn.btn-default.sub_home_player_foul{'data-player-id'=> player.id} -1
               .col-md-5.col-md-offset-1
                 .dashboard_labels
                   %center
                     Fouls
-                    .player_fouls 0
+                    .player_fouls
+                      %div{'data-fouls'=> 0, id: "fouls_player_#{player.id}"} 0
               .col-md-2
-                %button +1
+                .btn-group-xs
+                  %button.btn.btn-default.add_home_player_foul{'data-player-id'=> player.id} +1
     .col-md-6#visit_players_in
       - player_count = 0
       - @game.visit.players.each do |player|
@@ -161,23 +165,27 @@
                 .dashboard_labels
                   %center
                     Points
-                    .player_points 0
+                    .player_points
+                      %div{'data-points'=> 0, id: "points_player_#{player.id}"} 0
               .col-md-2.btn-toolbar
                 .btn-group-xs{role: 'group'}
-                  %button.btn.btn-default +F
-                  %button.btn.btn-default +2
-                  %button.btn.btn-default +3
+                  %button.btn.btn-default.add_points{'data-player-id'=> player.id, 'data-points'=> 1, 'data-courtside'=>'visit'} +F
+                  %button.btn.btn-default.add_points{'data-player-id'=> player.id, 'data-points'=> 2, 'data-courtside'=>'visit'} +2
+                  %button.btn.btn-default.add_points{'data-player-id'=> player.id, 'data-points'=> 3, 'data-courtside'=>'visit'}+3
           .col-md-3
             .row
               .col-md-2
-                %button -1
+                .btn-group-xs
+                  %button.btn.btn-default.sub_visit_player_foul{'data-player-id'=> player.id} -1
               .col-md-5.col-md-offset-1
                 .dashboard_labels
                   %center
                     Fouls
-                    .player_fouls 0
+                    .player_fouls
+                      %div{'data-fouls'=> 0, id: "fouls_player_#{player.id}"} 0
               .col-md-2
-                %button +1
+                .btn-group-xs
+                  %button.btn.btn-default.add_visit_player_foul{'data-player-id'=> player.id} +1
 
 :javascript
   var count = 30;
@@ -190,7 +198,9 @@
   var homeFouls = 0;
   var visitFouls = 0;
   var homeTO = 0;
-  var vistiTO = 0;
+  var visitTO = 0;
+  var homePoints = 0;
+  var visitPoints = 0;
 
   var snd = new Audio("/sounds/buzzer.mp3"); // buffers automatically when created
 
@@ -294,4 +304,114 @@
             clearInterval(int);
         }
     }, 10);
+  })
+
+  $('.add_home_player_foul').on('click', function(){
+    homeFouls++
+    player_id = $(this).attr('data-player-id');
+    var hf = $('#home_fouls')
+    hf.text(homeFouls)
+    var p = $('#fouls_player_'+player_id)
+    var pf = p.attr('data-fouls')
+    pf++
+    p.attr('data-fouls', pf)
+    p.text(pf)
+  })
+
+  $('.sub_home_player_foul').on('click', function(){
+    player_id = $(this).attr('data-player-id');
+    var p = $('#fouls_player_'+player_id)
+    var pf = p.attr('data-fouls')
+    if(pf>0){
+      pf--
+      if(homeFouls>0)
+        homeFouls--
+    }
+    var hf = $('#home_fouls')
+    hf.text(homeFouls)
+    p.attr('data-fouls', pf)
+    p.text(pf)
+  })
+
+  $('.add_visit_player_foul').on('click', function(){
+    visitFouls++
+    player_id = $(this).attr('data-player-id');
+    var hf = $('#visit_fouls')
+    hf.text(visitFouls)
+    var p = $('#fouls_player_'+player_id)
+    var pf = p.attr('data-fouls')
+    pf++
+    p.attr('data-fouls', pf)
+    p.text(pf)
+  })
+
+  $('.sub_visit_player_foul').on('click', function(){
+    player_id = $(this).attr('data-player-id');
+    var p = $('#fouls_player_'+player_id)
+    var pf = p.attr('data-fouls')
+    if(pf>0){
+      pf--
+      if(visitFouls>0)
+        visitFouls--
+    }
+    var hf = $('#visit_fouls')
+    hf.text(visitFouls)
+    p.attr('data-fouls', pf)
+    p.text(pf)
+  })
+
+  $('.add_points').on('click', function(){
+    var player_id = $(this).attr('data-player-id')
+    var points = parseInt($(this).attr('data-points'))
+    var courtside = $(this).attr('data-courtside')
+    var currentScoreObj
+    //addPoints(player_id, points, courtside)
+    if(courtside=='home'){
+      homePoints+=points
+      currentScoreObj = $('#score_home')
+    } else if(courtside=='visit'){
+      visitPoints+=points
+      currentScoreObj= $('#score_visit')
+    }
+    var current_points = parseInt(currentScoreObj.attr('data-value'))
+    current_points += points;
+
+    currentScoreObj.attr('data-value', current_points)
+    if(current_points<=9)
+      current_points = '0'+current_points
+    currentScoreObj.text(current_points)
+
+    var playerPointsObj = $('#points_player_'+player_id)
+    var current_points = parseInt(playerPointsObj.attr('data-points'))
+    current_points += points
+    playerPointsObj.attr('data-points', current_points)
+    $('#points_player_'+player_id).text(current_points)
+  })
+
+  $('.add_points').on('click', function(){
+    var player_id = $(this).attr('data-player-id')
+    var points = parseInt($(this).attr('data-points'))
+    var courtside = $(this).attr('data-courtside')
+    var currentScoreObj
+    //addPoints(player_id, points, courtside)
+    if(courtside=='home'){
+      homePoints+=points
+      currentScoreObj = $('#score_home')
+    } else if(courtside=='visit'){
+      visitPoints+=points
+      currentScoreObj= $('#score_visit')
+    }
+    var current_points = parseInt(currentScoreObj.attr('data-value'))
+    current_points += points;
+
+    currentScoreObj.attr('data-value', current_points)
+    if(current_points<=9)
+      current_points = '0'+current_points
+    currentScoreObj.text(current_points)
+
+    var playerPointsObj = $('#points_player_'+player_id)
+    var current_points = parseInt(playerPointsObj.attr('data-points'))
+    current_points += points
+    playerPointsObj.attr('data-points', current_points)
+    $('#points_player_'+player_id).text(current_points)
   })

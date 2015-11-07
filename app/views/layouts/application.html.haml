@@ -6,8 +6,20 @@
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   %body
-    %nav.navbar-fixed-top
-      %a games
+    %nav.navbar.navbar-default.navbar-fixed-top
+      .container-fluid
+        .navbar-header
+          %a.navbar-brand Baskcore
+        .collapse.navbar-collapse
+          %ul.nav.navbar-nav
+            %li
+              = link_to 'Tournament', tournaments_path
+            %li
+              = link_to 'Teams', teams_path
+            %li
+              = link_to 'Players', players_path
+            %li
+              = link_to 'Games', games_path
     %p.notice= notice
     %p.alert= alert
     .container-fluid
