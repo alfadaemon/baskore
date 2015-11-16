@@ -1,8 +1,6 @@
 Rails.application.routes.draw do
   resources :players
 
-  mount Upmin::Engine => '/admin'
-
   resources :games
   get 'games/:id/dashboard' => 'games#dashboard', as: :game_dashboard
 

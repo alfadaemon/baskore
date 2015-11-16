@@ -105,7 +105,7 @@
     .col-md-6#home_players_in
       - player_count = 0
       - @game.home.players.each do |player|
-        .row.player_well
+        .row.player_well{id: player.id}
           .col-md-1
             %button.dashboard_indicator_off.glyphicon.glyphicon-retweet
           .col-md-4
@@ -116,9 +116,9 @@
             .row
               .col-md-2.btn-group-vertical{role: 'group'}
                 .btn-group-xs
-                  %button.btn.btn-default.sub_points -F
-                  %button.btn.btn-default -2
-                  %button.btn.btn-default -3
+                  %button.btn.btn-default.sub_points{'data-player-id'=> player.id, 'data-points'=> 1, 'data-courtside'=>'home'} -F
+                  %button.btn.btn-default.sub_points{'data-player-id'=> player.id, 'data-points'=> 2, 'data-courtside'=>'home'} -2
+                  %button.btn.btn-default.sub_points{'data-player-id'=> player.id, 'data-points'=> 3, 'data-courtside'=>'home'} -3
               .col-md-5.col-md-offset-1
                 .dashboard_labels
                   %center
@@ -147,7 +147,7 @@
     .col-md-6#visit_players_in
       - player_count = 0
       - @game.visit.players.each do |player|
-        .row.player_well
+        .row.player_well{id: player.id}
           .col-md-1
             %button.dashboard_indicator_off.glyphicon.glyphicon-retweet
           .col-md-4
@@ -158,9 +158,9 @@
             .row
               .col-md-2.btn-toolbar{role: 'toolbar'}
                 .btn-group-xs{role: 'group'}
-                  %button.btn.btn-default -F
-                  %button.btn.btn-default -2
-                  %button.btn.btn-default -3
+                  %button.btn.btn-default.sub_points{'data-player-id'=> player.id, 'data-points'=> 1, 'data-courtside'=>'visit'} -F
+                  %button.btn.btn-default.sub_points{'data-player-id'=> player.id, 'data-points'=> 2, 'data-courtside'=>'visit'} -2
+                  %button.btn.btn-default.sub_points{'data-player-id'=> player.id, 'data-points'=> 3, 'data-courtside'=>'visit'} -3
               .col-md-5.col-md-offset-1
                 .dashboard_labels
                   %center
@@ -171,7 +171,7 @@
                 .btn-group-xs{role: 'group'}
                   %button.btn.btn-default.add_points{'data-player-id'=> player.id, 'data-points'=> 1, 'data-courtside'=>'visit'} +F
                   %button.btn.btn-default.add_points{'data-player-id'=> player.id, 'data-points'=> 2, 'data-courtside'=>'visit'} +2
-                  %button.btn.btn-default.add_points{'data-player-id'=> player.id, 'data-points'=> 3, 'data-courtside'=>'visit'}+3
+                  %button.btn.btn-default.add_points{'data-player-id'=> player.id, 'data-points'=> 3, 'data-courtside'=>'visit'} +3
           .col-md-3
             .row
               .col-md-2
@@ -364,54 +364,26 @@
     var player_id = $(this).attr('data-player-id')
     var points = parseInt($(this).attr('data-points'))
     var courtside = $(this).attr('data-courtside')
-    var currentScoreObj
+    var currentTeamScoreObj
     //addPoints(player_id, points, courtside)
     if(courtside=='home'){
       homePoints+=points
-      currentScoreObj = $('#score_home')
+      currentTeamScoreObj = $('#score_home')
     } else if(courtside=='visit'){
       visitPoints+=points
-      currentScoreObj= $('#score_visit')
+      currentTeamScoreObj= $('#score_visit')
     }
-    var current_points = parseInt(currentScoreObj.attr('data-value'))
+    var current_points = parseInt(currentTeamScoreObj.attr('data-value'))
     current_points += points;
 
-    currentScoreObj.attr('data-value', current_points)
+    currentTeamScoreObj.attr('data-value', current_points)
     if(current_points<=9)
       current_points = '0'+current_points
-    currentScoreObj.text(current_points)
+    currentTeamScoreObj.text(current_points)
 
     var playerPointsObj = $('#points_player_'+player_id)
-    var current_points = parseInt(playerPointsObj.attr('data-points'))
-    current_points += points
-    playerPointsObj.attr('data-points', current_points)
-    $('#points_player_'+player_id).text(current_points)
-  })
-
-  $('.add_points').on('click', function(){
-    var player_id = $(this).attr('data-player-id')
-    var points = parseInt($(this).attr('data-points'))
-    var courtside = $(this).attr('data-courtside')
-    var currentScoreObj
-    //addPoints(player_id, points, courtside)
-    if(courtside=='home'){
-      homePoints+=points
-      currentScoreObj = $('#score_home')
-    } else if(courtside=='visit'){
-      visitPoints+=points
-      currentScoreObj= $('#score_visit')
-    }
-    var current_points = parseInt(currentScoreObj.attr('data-value'))
-    current_points += points;
-
-    currentScoreObj.attr('data-value', current_points)
-    if(current_points<=9)
-      current_points = '0'+current_points
-    currentScoreObj.text(current_points)
-
-    var playerPointsObj = $('#points_player_'+player_id)
-    var current_points = parseInt(playerPointsObj.attr('data-points'))
-    current_points += points
-    playerPointsObj.attr('data-points', current_points)
-    $('#points_player_'+player_id).text(current_points)
+    var current_player_points = parseInt(playerPointsObj.attr('data-points'))
+    current_player_points += points
+    playerPointsObj.attr('data-points', current_player_points)
+    playerPointsObj.text(current_player_points)
   })
