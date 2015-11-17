@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151107191642) do
+ActiveRecord::Schema.define(version: 20151117163424) do
 
   create_table "games", force: :cascade do |t|
     t.string   "name"
@@ -20,9 +20,10 @@ ActiveRecord::Schema.define(version: 20151107191642) do
     t.date     "game_date"
     t.integer  "home_score",  default: 0
     t.integer  "visit_score", default: 0
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.integer  "round_id"
+    t.string   "status",      default: "Scheduled"
   end
 
   add_index "games", ["home_id"], name: "index_games_on_home_id"

@@ -6,6 +6,8 @@ class Game < ActiveRecord::Base
   before_save :create_name
   before_validation :same_team
 
+  STATUS = ['Scheduled', 'In Progress', 'Finished']
+
   private
     def create_name
       self.name = self.home.name+' vs '+self.visit.name
