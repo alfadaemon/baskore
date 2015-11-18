@@ -63,7 +63,12 @@ class GamesController < ApplicationController
   end
 
   def dashboard
-    @game = Game.find(params[:id])
+    game = Game.find(params[:id])
+    if game.status==Game::STATUS[1]
+      #need to load the game
+    else
+      @game = game
+    end
   end
 
   private

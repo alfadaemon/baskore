@@ -103,14 +103,15 @@
 .container-fluid{style: "background-color: black; margin-top: 120px;"}
   .row
     .col-md-6#home_players_in
-      - player_count = 0
       - @game.home.players.each do |player|
         .row.player_well{id: player.id}
           .col-md-1
             %button.dashboard_indicator_off.glyphicon.glyphicon-retweet
+            %button.dashboard_indicator_off.glyphicon.glyphicon-check
+            %button.dashboard_indicator_off.glyphicon.glyphicon-transfer
           .col-md-4
             .player_number
-              %input.player_number{size:2, style:"background-color:black"}
+              %input.player_number{type:'text', size:2, style:"background-color:black", pattern: '\d{1,2}', 'data-player-name'=> player.name,  'data-player-id'=> player.id}
             .player_name= player.name
           .col-md-4
             .row
@@ -145,14 +146,15 @@
                 .btn-group-xs
                   %button.btn.btn-default.add_home_player_foul{'data-player-id'=> player.id} +1
     .col-md-6#visit_players_in
-      - player_count = 0
       - @game.visit.players.each do |player|
         .row.player_well{id: player.id}
           .col-md-1
             %button.dashboard_indicator_off.glyphicon.glyphicon-retweet
+            %button.dashboard_indicator_off.glyphicon.glyphicon-check
+            %button.dashboard_indicator_off.glyphicon.glyphicon-transfer
           .col-md-4
             .player_number
-              %input.player_number{size:2, style:"background-color:black"}
+              %input.player_number{type:'text', size:2, style:"background-color:black", pattern: '\d{1,2}', 'data-player-name'=> player.name,  'data-player-id'=> player.id}
             .player_name= player.name
           .col-md-4
             .row
@@ -186,7 +188,6 @@
               .col-md-2
                 .btn-group-xs
                   %button.btn.btn-default.add_visit_player_foul{'data-player-id'=> player.id} +1
-
 :javascript
   var count = 30;
   var mins = 10; //Set the number of minutes you need
@@ -201,6 +202,7 @@
   var visitTO = 0;
   var homePoints = 0;
   var visitPoints = 0;
+  var Players = {}
 
   var snd = new Audio("/sounds/buzzer.mp3"); // buffers automatically when created
 
@@ -307,83 +309,168 @@
   })
 
   $('.add_home_player_foul').on('click', function(){
-    homeFouls++
     player_id = $(this).attr('data-player-id');
-    var hf = $('#home_fouls')
-    hf.text(homeFouls)
-    var p = $('#fouls_player_'+player_id)
-    var pf = p.attr('data-fouls')
-    pf++
-    p.attr('data-fouls', pf)
-    p.text(pf)
+    if(Players[player_id]!==undefined){
+      homeFouls++
+      var hf = $('#home_fouls')
+      hf.text(homeFouls)
+      var p = $('#fouls_player_'+player_id)
+      var pf = p.attr('data-fouls')
+      pf++
+      p.attr('data-fouls', pf)
+      p.text(pf)
+      Players[player_id].addFoul()
+    }
   })
 
   $('.sub_home_player_foul').on('click', function(){
     player_id = $(this).attr('data-player-id');
-    var p = $('#fouls_player_'+player_id)
-    var pf = p.attr('data-fouls')
-    if(pf>0){
-      pf--
-      if(homeFouls>0)
-        homeFouls--
+    if(Players[player_id]!==undefined){
+      var p = $('#fouls_player_'+player_id)
+      var pf = p.attr('data-fouls')
+      if(pf>0){
+        pf--
+        if(homeFouls>0)
+          homeFouls--
+      }
+      var hf = $('#home_fouls')
+      hf.text(homeFouls)
+      p.attr('data-fouls', pf)
+      p.text(pf)
+      Players[player_id].removeFoul()
     }
-    var hf = $('#home_fouls')
-    hf.text(homeFouls)
-    p.attr('data-fouls', pf)
-    p.text(pf)
   })
 
   $('.add_visit_player_foul').on('click', function(){
-    visitFouls++
     player_id = $(this).attr('data-player-id');
-    var hf = $('#visit_fouls')
-    hf.text(visitFouls)
-    var p = $('#fouls_player_'+player_id)
-    var pf = p.attr('data-fouls')
-    pf++
-    p.attr('data-fouls', pf)
-    p.text(pf)
+    if(Players[player_id]!==undefined){
+      visitFouls++
+      var hf = $('#visit_fouls')
+      hf.text(visitFouls)
+      var p = $('#fouls_player_'+player_id)
+      var pf = p.attr('data-fouls')
+      pf++
+      p.attr('data-fouls', pf)
+      p.text(pf)
+      Players[player_id].addFoul()
+    }
   })
 
   $('.sub_visit_player_foul').on('click', function(){
     player_id = $(this).attr('data-player-id');
-    var p = $('#fouls_player_'+player_id)
-    var pf = p.attr('data-fouls')
-    if(pf>0){
-      pf--
-      if(visitFouls>0)
-        visitFouls--
+    if(Players[player_id]!==undefined){
+      var p = $('#fouls_player_'+player_id)
+      var pf = p.attr('data-fouls')
+      if(pf>0){
+        pf--
+        if(visitFouls>0)
+          visitFouls--
+      }
+      var hf = $('#visit_fouls')
+      hf.text(visitFouls)
+      p.attr('data-fouls', pf)
+      p.text(pf)
+      Players[player_id].removeFoul()
     }
-    var hf = $('#visit_fouls')
-    hf.text(visitFouls)
-    p.attr('data-fouls', pf)
-    p.text(pf)
+  })
+
+  $('.glyphicon-transfer').on('click', function(){
+    var playerObj = $(this).parent().parent()
+    var player_id = playerObj.attr('id')
+    if(Players[player_id]!==undefined){
+      playerObj.hide()
+      $(this).siblings('.glyphicon-check').remove()
+      $(this).remove()
+    } else {
+      alert('Set up player number first')
+    }
+  })
+
+  $('.glyphicon-check').on('click', function(){
+    var playerObj = $(this).parent().parent()
+    var player_id = playerObj.attr('id')
+    if(Players[player_id]!==undefined){
+      $(this).siblings('.glyphicon-transfer').remove()
+      $(this).remove()
+    } else {
+      alert('Set up player number first')
+    }
   })
 
   $('.add_points').on('click', function(){
     var player_id = $(this).attr('data-player-id')
-    var points = parseInt($(this).attr('data-points'))
-    var courtside = $(this).attr('data-courtside')
-    var currentTeamScoreObj
-    //addPoints(player_id, points, courtside)
-    if(courtside=='home'){
-      homePoints+=points
-      currentTeamScoreObj = $('#score_home')
-    } else if(courtside=='visit'){
-      visitPoints+=points
-      currentTeamScoreObj= $('#score_visit')
+    if(Players[player_id]!==undefined){
+      var points = parseInt($(this).attr('data-points'))
+      var courtside = $(this).attr('data-courtside')
+      var currentTeamScoreObj
+      if(courtside=='home'){
+        homePoints+=points
+        currentTeamScoreObj = $('#score_home')
+      } else if(courtside=='visit'){
+        visitPoints+=points
+        currentTeamScoreObj= $('#score_visit')
+      }
+      var current_points = parseInt(currentTeamScoreObj.attr('data-value'))
+      current_points += points;
+
+      currentTeamScoreObj.attr('data-value', current_points)
+      if(current_points<=9)
+        current_points = '0'+current_points
+      currentTeamScoreObj.text(current_points)
+
+      Players[player_id].addPoints(points)
+      //Get the player's points obj
+      var playerPointsObj = $('#points_player_'+player_id)
+      //Update the UI
+      playerPointsObj.attr('data-points', Players[player_id].points)
+      playerPointsObj.text(Players[player_id].points)
     }
-    var current_points = parseInt(currentTeamScoreObj.attr('data-value'))
-    current_points += points;
-
-    currentTeamScoreObj.attr('data-value', current_points)
-    if(current_points<=9)
-      current_points = '0'+current_points
-    currentTeamScoreObj.text(current_points)
-
-    var playerPointsObj = $('#points_player_'+player_id)
-    var current_player_points = parseInt(playerPointsObj.attr('data-points'))
-    current_player_points += points
-    playerPointsObj.attr('data-points', current_player_points)
-    playerPointsObj.text(current_player_points)
   })
+
+  function Player(id, name, number='empty'){
+    this.id = id
+    this.name = name
+    this.number = number
+    this.points = 0
+    this.fouls = 0
+    this.status = 'bench'
+    this.init = function(id, name, number='empty') {
+      this.id = id
+      this.name = name
+      this.number = number
+      return this
+    }
+    this.setNumber = function(newNumber){
+      this.number = newNumber
+    }
+    this.addPoints = function(newPoints) { this.points += newPoints}
+    this.addFoul = function() { this.fouls++}
+    this.removePoints = function(newPoints) { this.points -= newPoints}
+    this.removeFoul = function() { this.fouls--}
+    this.setInGame = function() { this.status = 'playing'}
+    this.setOnBench = function() { this.status = 'bench'}
+  }
+
+  $('input.player_number').on('keyup', function(e) {
+    if (e.which == 13 || e.keyCode == 13) {
+      var player_id = $(this).attr('data-player-id')
+      if(player_id!==undefined && player_id!==null){
+          if(Players[player_id]!==undefined && Players[player_id]!==null){
+            console.log('here')
+            console.log('id: '+player_id+', number: '+$(this).val())
+            Players[player_id].setNumber($(this).val())
+            $(this).prop('disabled', true);
+          }else{
+            var player_name = $(this).attr('data-player-name')
+            if(player_name!==undefined && player_name!==null){
+              var newPlayer = new Player(player_id, player_name, $(this).val())
+              Players[player_id] = newPlayer
+              $(this).prop('disabled', true)
+            }else
+              alert('An error ocurred: No player name')
+          }
+          e.preventDefault()
+      } else
+        alert('An error ocurred: Could not get player id')
+    }
+  });
