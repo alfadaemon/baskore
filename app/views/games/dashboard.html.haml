@@ -104,19 +104,19 @@
   .row
     .col-md-6#home_players_in
       - @game.home.players.each do |player|
-        .row.player_well{id: player.id}
+        .row.player_well{id: player.id, 'data-team-id'=>player.team_id, 'data-player-name'=>player.name}
           .col-md-1
-            %button.dashboard_indicator_off.glyphicon.glyphicon-retweet
-            %button.dashboard_indicator_off.glyphicon.glyphicon-check
-            %button.dashboard_indicator_off.glyphicon.glyphicon-transfer
+            %button.dashboard_indicator_off.glyphicon.glyphicon-retweet{'data-team-id'=>player.team_id, 'data-player-id'=> player.id, 'data-toggle'=>'modal', 'data-target'=>'.bs-example-modal-lg'}
+            %button.dashboard_indicator_off.glyphicon.glyphicon-check{'data-player-id'=> player.id}
+            %button.dashboard_indicator_off.glyphicon.glyphicon-transfer{'data-player-id'=> player.id}
           .col-md-4
             .player_number
-              %input.player_number{type:'text', size:2, style:"background-color:black", pattern: '\d{1,2}', 'data-player-name'=> player.name,  'data-player-id'=> player.id}
+              %input.player_number{type:'text', size:2, style:"background-color:black", pattern: '\d{1,2}', 'data-player-name'=> player.name,  'data-player-id'=> player.id, 'data-team-id'=> player.team_id}
             .player_name= player.name
           .col-md-4
             .row
               .col-md-2.btn-group-vertical{role: 'group'}
-                .btn-group-xs
+                .btn-group-xs{role: 'group', style: 'display:none'}
                   %button.btn.btn-default.sub_points{'data-player-id'=> player.id, 'data-points'=> 1, 'data-courtside'=>'home'} -F
                   %button.btn.btn-default.sub_points{'data-player-id'=> player.id, 'data-points'=> 2, 'data-courtside'=>'home'} -2
                   %button.btn.btn-default.sub_points{'data-player-id'=> player.id, 'data-points'=> 3, 'data-courtside'=>'home'} -3
@@ -127,7 +127,7 @@
                     .player_points
                       %div{'data-points'=> 0, id: "points_player_#{player.id}"} 0
               .col-md-2.btn-group-vertical{role: 'group'}
-                .btn-group-xs
+                .btn-group-xs{role: 'group'}
                   %button.btn.btn-default.add_points{'data-player-id'=> player.id, 'data-points'=> 1, 'data-courtside'=>'home'} +F
                   %button.btn.btn-default.add_points{'data-player-id'=> player.id, 'data-points'=> 2, 'data-courtside'=>'home'} +2
                   %button.btn.btn-default.add_points{'data-player-id'=> player.id, 'data-points'=> 3, 'data-courtside'=>'home'} +3
@@ -147,19 +147,19 @@
                   %button.btn.btn-default.add_home_player_foul{'data-player-id'=> player.id} +1
     .col-md-6#visit_players_in
       - @game.visit.players.each do |player|
-        .row.player_well{id: player.id}
+        .row.player_well{id: player.id, 'data-team-id'=>player.team_id, 'data-player-name'=>player.name}
           .col-md-1
-            %button.dashboard_indicator_off.glyphicon.glyphicon-retweet
-            %button.dashboard_indicator_off.glyphicon.glyphicon-check
-            %button.dashboard_indicator_off.glyphicon.glyphicon-transfer
+            %button.dashboard_indicator_off.glyphicon.glyphicon-retweet{'data-team-id'=>player.team_id, 'data-player-id'=> player.id, 'data-toggle'=>'modal', 'data-target'=>'.bs-example-modal-lg'}
+            %button.dashboard_indicator_off.glyphicon.glyphicon-check{'data-player-id'=> player.id}
+            %button.dashboard_indicator_off.glyphicon.glyphicon-transfer{'data-player-id'=> player.id}
           .col-md-4
             .player_number
-              %input.player_number{type:'text', size:2, style:"background-color:black", pattern: '\d{1,2}', 'data-player-name'=> player.name,  'data-player-id'=> player.id}
+              %input.player_number{type:'text', size:2, style:"background-color:black", pattern: '\d{1,2}', 'data-player-name'=> player.name,  'data-player-id'=> player.id, 'data-team-id'=> player.team_id}
             .player_name= player.name
           .col-md-4
             .row
-              .col-md-2.btn-toolbar{role: 'toolbar'}
-                .btn-group-xs{role: 'group'}
+              .col-md-2.btn-group-vertical{role: 'group'}
+                .btn-group-xs{role: 'group', style: 'display:none'}
                   %button.btn.btn-default.sub_points{'data-player-id'=> player.id, 'data-points'=> 1, 'data-courtside'=>'visit'} -F
                   %button.btn.btn-default.sub_points{'data-player-id'=> player.id, 'data-points'=> 2, 'data-courtside'=>'visit'} -2
                   %button.btn.btn-default.sub_points{'data-player-id'=> player.id, 'data-points'=> 3, 'data-courtside'=>'visit'} -3
@@ -169,7 +169,7 @@
                     Points
                     .player_points
                       %div{'data-points'=> 0, id: "points_player_#{player.id}"} 0
-              .col-md-2.btn-toolbar
+              .col-md-2.btn-group-vertical{role: 'group'}
                 .btn-group-xs{role: 'group'}
                   %button.btn.btn-default.add_points{'data-player-id'=> player.id, 'data-points'=> 1, 'data-courtside'=>'visit'} +F
                   %button.btn.btn-default.add_points{'data-player-id'=> player.id, 'data-points'=> 2, 'data-courtside'=>'visit'} +2
@@ -188,6 +188,18 @@
               .col-md-2
                 .btn-group-xs
                   %button.btn.btn-default.add_visit_player_foul{'data-player-id'=> player.id} +1
+
+.modal.fade.bs-example-modal-lg
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{type:"button", 'data-dismiss'=>"modal", 'aria-label'=>"Close"}
+          %span{'aria-hidden'=>"true"}
+            &times;
+        %h4.modal-title Change Player
+      .modal-body
+        %table.table.table-striped.table-bordered.table-hover.table-condensed.table-responsive
+
 :javascript
   var count = 30;
   var mins = 10; //Set the number of minutes you need
@@ -374,24 +386,47 @@
     }
   })
 
-  $('.glyphicon-transfer').on('click', function(){
-    var playerObj = $(this).parent().parent()
-    var player_id = playerObj.attr('id')
-    if(Players[player_id]!==undefined){
-      playerObj.hide()
-      $(this).siblings('.glyphicon-check').remove()
-      $(this).remove()
-    } else {
-      alert('Set up player number first')
+  $('.glyphicon-retweet').on('click', function(){
+    var player_out = $(this).attr('data-player-id')
+    var modalObj= $('.bs-example-modal-lg .modal-body table')
+    modalObj.empty()
+    for(id in Players){
+      if(parseInt(Players[id].team_id)==parseInt($(this).attr('data-team-id'))){
+        if(Players[id].status==="bench"){
+          modalObj.append('<tr><td>'+
+                          Players[id].name+'</td><td class="player_points" style="color:green;font-size:1.2em">'+
+                          Players[id].points+'</td><td class="player_points" style="color:red;font-size:1.2em">'+
+                          Players[id].fouls+'</td><td><button class="button-warning change" data-in="'+id+'" data-out="'+player_out+'">'+
+                          Players[id].number+'</button></td></tr>')
+        }
+      }
     }
   })
 
+  //Sent to bench
+  $('.glyphicon-transfer').on('click', function(){
+    var player_id = $(this).attr('data-player-id')
+    var playerObj = $('#'+player_id)
+    var ingame = $(this).parent().parent().parent().find('.player_well:visible').length
+    if(ingame>5){
+      playerObj.fadeToggle()
+      $(this).siblings('.glyphicon-check').remove()
+      $(this).remove()
+      Players[player_id].setOnBench()
+    } else {
+      alert('5 players in game only')
+    }
+  })
+
+  //Playing
   $('.glyphicon-check').on('click', function(){
     var playerObj = $(this).parent().parent()
     var player_id = playerObj.attr('id')
+    //var ingame = $(this).parent().parent().parent().find('.player_well:visible').length
     if(Players[player_id]!==undefined){
       $(this).siblings('.glyphicon-transfer').remove()
       $(this).remove()
+      Players[player_id].setInGame()
     } else {
       alert('Set up player number first')
     }
@@ -427,17 +462,19 @@
     }
   })
 
-  function Player(id, name, number='empty'){
+  function Player(id, name, team_id, number='empty'){
     this.id = id
     this.name = name
     this.number = number
     this.points = 0
     this.fouls = 0
     this.status = 'bench'
-    this.init = function(id, name, number='empty') {
+    this.team_id = team_id
+    this.init = function(id, name, team_id, number='empty') {
       this.id = id
       this.name = name
       this.number = number
+      this.team_id = team_id
       return this
     }
     this.setNumber = function(newNumber){
@@ -454,23 +491,42 @@
   $('input.player_number').on('keyup', function(e) {
     if (e.which == 13 || e.keyCode == 13) {
       var player_id = $(this).attr('data-player-id')
-      if(player_id!==undefined && player_id!==null){
-          if(Players[player_id]!==undefined && Players[player_id]!==null){
-            console.log('here')
-            console.log('id: '+player_id+', number: '+$(this).val())
-            Players[player_id].setNumber($(this).val())
-            $(this).prop('disabled', true);
-          }else{
-            var player_name = $(this).attr('data-player-name')
-            if(player_name!==undefined && player_name!==null){
-              var newPlayer = new Player(player_id, player_name, $(this).val())
-              Players[player_id] = newPlayer
-              $(this).prop('disabled', true)
-            }else
-              alert('An error ocurred: No player name')
-          }
-          e.preventDefault()
+      var team_id = $(this).attr('data-team-id')
+      if(player_id!==undefined && player_id!==null
+          && team_id!==undefined && team_id!==null){
+        if(Players[player_id]!==undefined && Players[player_id]!==null){
+          Players[player_id].setNumber($(this).val())
+          $(this).prop('disabled', true);
+        }else{
+          var player_name = $(this).attr('data-player-name')
+          if(player_name!==undefined && player_name!==null){
+            var newPlayer = new Player(player_id, player_name, team_id, $(this).val())
+            Players[player_id] = newPlayer
+            $(this).prop('disabled', true)
+          }else
+            alert('An error ocurred: No player name')
+        }
+        e.preventDefault()
       } else
         alert('An error ocurred: Could not get player id')
     }
   });
+
+  $('.player_well').one('mouseenter', function(e){
+    player_id = $(this).attr('id')
+    player_name = $(this).attr('data-player-name')
+    team_id = $(this).attr('data-team-id')
+    var newPlayer = new Player(player_id, player_name, team_id)
+    Players[player_id] = newPlayer
+  })
+
+  $('.modal-body table').on('click', '.change', function(e){
+    var player_in = $(this).attr('data-in')
+    var player_out = $(this).attr('data-out')
+    Players[player_in].setInGame()
+    $('#'+player_in).fadeToggle()
+    Players[player_out].setOnBench()
+    $('#'+player_out).fadeToggle()
+    $('.modal').modal('hide')
+    e.preventDefault()
+  })
