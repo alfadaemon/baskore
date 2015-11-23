@@ -541,6 +541,7 @@
     }
     this.setNumber = function(newNumber){ this.number = newNumber }
     this.addPoints = function(newPoints, game, period) {
+      var success = false
       $.ajax({
         url:"/game_logs.json",
         method: "POST",
@@ -553,15 +554,16 @@
         }},
         dataType: "json",
         success: function(){
-          console.log('Points record created!')
-          this.points += newPoints
+          console.log(' Points record created!')
         },
         error: function(e){
           alert('Could not save points in log!!')
         }
       })
+      this.points += newPoints
     }
     this.addFoul = function(game, period) {
+      var success = false
       $.ajax({
         url:"/game_logs.json",
         method: "POST",
@@ -575,12 +577,13 @@
         dataType: "json",
         success: function(){
           console.log('Foul record created!')
-          this.fouls++
+          success = true
         },
         error: function(e){
           alert('Could not save fouls in log!!')
         }
       })
+      this.fouls++
     }
     this.removePoints = function(newPoints) { this.points -= newPoints}
     this.removeFoul = function() { this.fouls--}
