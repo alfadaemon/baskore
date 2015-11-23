@@ -56,25 +56,29 @@
             %button.horn
               %span.glyphicon.glyphicon-volume-up.controls
         .row
-          .col-md-2
+          .col-md-1
             %center
               %span.poss
                 %a.dashboard_indicator_on.glyphicon.glyphicon-arrow-left
           .col-md-2
             %center
               .dashboard_labels Poss
-          .col-md-2
+          .col-md-1
             %center
               %span.poss
                 %a.dashboard_indicator_off.glyphicon.glyphicon-arrow-right
-          .col-md-2
+          .col-md-4
+            %center
+              %span
+                %a.glyphicon.glyphicon-stats
+          .col-md-1
             %center
               %span.bonus
                 %a.dashboard_indicator_on.glyphicon.glyphicon-arrow-left
           .col-md-2
             %center
               .dashboard_labels Bonus
-          .col-md-2
+          .col-md-1
             %center
               %span.bonus
                 %a.dashboard_indicator_off.glyphicon.glyphicon-arrow-right
@@ -207,12 +211,13 @@
         %table.table.table-striped.table-bordered.table-hover.table-condensed.table-responsive
 
 :javascript
-  var count = 30;
+  //var count = 30;
   var mins = 10; //Set the number of minutes you need
   var secs = mins * 60;
   var currentSeconds = 0;
   var currentMinutes = 10;
   var isPaused = true;
+  //TODO: The following should be in its own object
   var currentPeriod = 1;
   var homeFouls = 0;
   var visitFouls = 0;
@@ -515,9 +520,7 @@
       this.team_id = team_id
       return this
     }
-    this.setNumber = function(newNumber){
-      this.number = newNumber
-    }
+    this.setNumber = function(newNumber){ this.number = newNumber }
     this.addPoints = function(newPoints) { this.points += newPoints}
     this.addFoul = function() { this.fouls++}
     this.removePoints = function(newPoints) { this.points -= newPoints}
@@ -530,8 +533,7 @@
     if (e.which == 13 || e.keyCode == 13) {
       var player_id = $(this).attr('data-player-id')
       var team_id = $(this).attr('data-team-id')
-      if(player_id!==undefined && player_id!==null
-          && team_id!==undefined && team_id!==null){
+      if(player_id!==undefined && player_id!==null && team_id!==undefined && team_id!==null){
         if(Players[player_id]!==undefined && Players[player_id]!==null){
           Players[player_id].setNumber($(this).val())
           $(this).prop('disabled', true);
@@ -544,10 +546,10 @@
           }else
             alert('An error ocurred: No player name')
         }
-        e.preventDefault()
       } else
         alert('An error ocurred: Could not get player id')
     }
+    e.preventDefault()
   });
 
   $('.player_well').one('mouseenter', function(e){
