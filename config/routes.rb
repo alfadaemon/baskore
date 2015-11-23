@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :game_logs
+  get '/game_logs/game/:game_id' => 'game_logs#game', as: :game_logs_game, constraints: { format: 'json' }
+
   resources :players
 
   resources :games

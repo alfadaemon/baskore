@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b Game:
+  = @game_log.game.name
+%p
+  %b Player:
+  = @game_log.player.name
+%p
+  %b Period:
+  = @game_log.period
+%p
+  %b Event:
+  = @game_log.name
+%p
+  %b Count:
+  = @game_log.count
+
+= link_to 'Edit', edit_game_log_path(@game_log)
+\|
+= link_to 'Back', game_logs_path

@@ -1,4 +1,4 @@
-.navbar-fixed-top{style: "background-color:black;"}
+.navbar-fixed-top{style: "background-color:black;", id: @game.id}
   .row
     .col-md-4
       %center
@@ -70,7 +70,7 @@
           .col-md-4
             %center
               %span
-                %a.glyphicon.glyphicon-stats
+                %a.glyphicon.glyphicon-stats{'data-toggle'=>'modal', 'data-target'=>'#stats.bs-example-modal-lg'}
           .col-md-1
             %center
               %span.bonus
@@ -116,7 +116,7 @@
       - @game.home.players.each do |player|
         .row.player_well{id: player.id, 'data-team-id'=>player.team_id, 'data-player-name'=>player.name}
           .col-md-1
-            %button.dashboard_indicator_off.glyphicon.glyphicon-retweet{'data-team-id'=>player.team_id, 'data-player-id'=> player.id, 'data-toggle'=>'modal', 'data-target'=>'.bs-example-modal-lg'}
+            %button.dashboard_indicator_off.glyphicon.glyphicon-retweet{'data-team-id'=>player.team_id, 'data-player-id'=> player.id, 'data-toggle'=>'modal', 'data-target'=>'#change_player.bs-example-modal-lg'}
             %button.dashboard_indicator_off.glyphicon.glyphicon-check{'data-player-id'=> player.id}
             %button.dashboard_indicator_off.glyphicon.glyphicon-transfer{'data-player-id'=> player.id}
           .col-md-4
@@ -159,7 +159,7 @@
       - @game.visit.players.each do |player|
         .row.player_well{id: player.id, 'data-team-id'=>player.team_id, 'data-player-name'=>player.name}
           .col-md-1
-            %button.dashboard_indicator_off.glyphicon.glyphicon-retweet{'data-team-id'=>player.team_id, 'data-player-id'=> player.id, 'data-toggle'=>'modal', 'data-target'=>'.bs-example-modal-lg'}
+            %button.dashboard_indicator_off.glyphicon.glyphicon-retweet{'data-team-id'=>player.team_id, 'data-player-id'=> player.id, 'data-toggle'=>'modal', 'data-target'=>'#change_player.bs-example-modal-lg'}
             %button.dashboard_indicator_off.glyphicon.glyphicon-check{'data-player-id'=> player.id}
             %button.dashboard_indicator_off.glyphicon.glyphicon-transfer{'data-player-id'=> player.id}
           .col-md-4
@@ -199,7 +199,7 @@
                 .btn-group-xs
                   %button.btn.btn-default.add_visit_player_foul{'data-player-id'=> player.id} +1
 
-.modal.fade.bs-example-modal-lg
+.modal.fade.bs-example-modal-lg{id:'change_player'}
   .modal-dialog
     .modal-content
       .modal-header
@@ -210,6 +210,24 @@
       .modal-body
         %table.table.table-striped.table-bordered.table-hover.table-condensed.table-responsive
 
+.modal.fade.bs-example-modal-lg{id:'stats'}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{type:"button", 'data-dismiss'=>"modal", 'aria-label'=>"Close"}
+          %span{'aria-hidden'=>"true"}
+            &times;
+        %h4.modal-title Game Stats
+      .modal-body
+        %table.table.table-striped.table-bordered.table-hover.table-condensed.table-responsive
+          %thead
+            %td Team
+            %td Player
+            %td Period
+            %td Event
+            %td Count
+          %tbody
+
 :javascript
   //var count = 30;
   var mins = 10; //Set the number of minutes you need
@@ -218,6 +236,7 @@
   var currentMinutes = 10;
   var isPaused = true;
   //TODO: The following should be in its own object
+  var game_id = $('.navbar-fixed-top').attr('id')
   var currentPeriod = 1;
   var homeFouls = 0;
   var visitFouls = 0;
@@ -373,7 +392,7 @@
       pf++
       p.attr('data-fouls', pf)
       p.text(pf)
-      Players[player_id].addFoul()
+      Players[player_id].addFoul(game_id, currentPeriod)
     }
   })
 
@@ -406,7 +425,7 @@
       pf++
       p.attr('data-fouls', pf)
       p.text(pf)
-      Players[player_id].addFoul()
+      Players[player_id].addFoul(game_id, currentPeriod)
     }
   })
 
@@ -431,7 +450,7 @@
   //Change player
   $('.glyphicon-retweet').on('click', function(){
     var player_out = $(this).attr('data-player-id')
-    var modalObj= $('.bs-example-modal-lg .modal-body table')
+    var modalObj= $('#change_player.bs-example-modal-lg .modal-body table')
     modalObj.empty()
     for(id in Players){
       if(parseInt(Players[id].team_id)==parseInt($(this).attr('data-team-id'))){
@@ -496,7 +515,7 @@
         current_points = '0'+current_points
       currentTeamScoreObj.text(current_points)
 
-      Players[player_id].addPoints(points)
+      Players[player_id].addPoints(points, game_id, currentPeriod)
       //Get the player's points obj
       var playerPointsObj = $('#points_player_'+player_id)
       //Update the UI
@@ -505,24 +524,64 @@
     }
   })
 
-  function Player(id, name, team_id, number='empty'){
+  function Player(id, name, team_id, number){
     this.id = id
     this.name = name
-    this.number = number
+    this.number = number || 'empty'
     this.points = 0
     this.fouls = 0
     this.status = 'bench'
     this.team_id = team_id
-    this.init = function(id, name, team_id, number='empty') {
+    this.init = function(id, name, team_id, number) {
       this.id = id
       this.name = name
-      this.number = number
+      this.number = number || 'empty'
       this.team_id = team_id
       return this
     }
     this.setNumber = function(newNumber){ this.number = newNumber }
-    this.addPoints = function(newPoints) { this.points += newPoints}
-    this.addFoul = function() { this.fouls++}
+    this.addPoints = function(newPoints, game, period) {
+      $.ajax({
+        url:"/game_logs.json",
+        method: "POST",
+        data: { game_log: {
+          game_id :game,
+          player_id: this.id,
+          event: 0,
+          count: newPoints,
+          period: period
+        }},
+        dataType: "json",
+        success: function(){
+          console.log('Points record created!')
+          this.points += newPoints
+        },
+        error: function(e){
+          alert('Could not save points in log!!')
+        }
+      })
+    }
+    this.addFoul = function(game, period) {
+      $.ajax({
+        url:"/game_logs.json",
+        method: "POST",
+        data: { game_log: {
+          game_id :game,
+          player_id: this.id,
+          event: 1,
+          count: 1,
+          period: period
+        }},
+        dataType: "json",
+        success: function(){
+          console.log('Foul record created!')
+          this.fouls++
+        },
+        error: function(e){
+          alert('Could not save fouls in log!!')
+        }
+      })
+    }
     this.removePoints = function(newPoints) { this.points -= newPoints}
     this.removeFoul = function() { this.fouls--}
     this.setInGame = function() { this.status = 'playing'}
@@ -560,13 +619,31 @@
     Players[player_id] = newPlayer
   })
 
-  $('.modal-body table').on('click', '.change', function(e){
+  $('#change_player .modal-body table').on('click', '.change', function(e){
     var player_in = $(this).attr('data-in')
     var player_out = $(this).attr('data-out')
     Players[player_in].setInGame()
     $('#'+player_in).fadeToggle()
     Players[player_out].setOnBench()
     $('#'+player_out).fadeToggle()
-    $('.modal').modal('hide')
+    $('#change_player.modal').modal('hide')
     e.preventDefault()
+  })
+
+  $('#stats').on('shown.bs.modal', function(e){
+    $.ajax({
+      url: "/game_logs/game/"+game_id+".json",
+      success: function(response){
+        var table_body = $('#stats .modal-body table.table tbody')
+        table_body.empty()
+        $.each(response, function(i, item) {
+          table_body.append('<tr>'+
+          '<td>'+item.team+'</td>'+
+          '<td>'+item.player+'</td>'+
+          '<td>'+item.period+'</td>'+
+          '<td>'+item.event+'</td>'+
+          '<td>'+item.count+'</td></tr>')
+        })
+      }
+    })
   })

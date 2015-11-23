@@ -1,0 +1,29 @@
+%h1 Listing game_logs
+
+%table.table.table-bordered.table-striped
+  %thead
+    %tr
+      %th Game
+      %th Player
+      %th Period
+      %th Event
+      %th Count
+      %th
+      %th
+      %th
+
+  %tbody
+    - @game_logs.each do |game_log|
+      %tr
+        %td= game_log.game.name
+        %td= game_log.player.name
+        %td= game_log.period
+        %td= game_log.name
+        %td= game_log.count
+        %td= link_to 'Show', game_log
+        %td= link_to 'Edit', edit_game_log_path(game_log)
+        %td= link_to 'Destroy', game_log, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Game log', new_game_log_path
