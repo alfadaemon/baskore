@@ -25,6 +25,9 @@
           .col-md-1
             %center
               #home_fouls.indicator_small 0
+          .col-md-1
+            .btn-group-xs
+              %button.reset_fouls.btn.btn-default.glyphicon.glyphicon-refresh
     .col-md-4
       %center
         .row
@@ -55,25 +58,25 @@
         .row
           .col-md-2
             %center
-              %span
+              %span.poss
                 %a.dashboard_indicator_on.glyphicon.glyphicon-arrow-left
           .col-md-2
             %center
               .dashboard_labels Poss
           .col-md-2
             %center
-              %span
+              %span.poss
                 %a.dashboard_indicator_off.glyphicon.glyphicon-arrow-right
           .col-md-2
             %center
-              %span
+              %span.bonus
                 %a.dashboard_indicator_on.glyphicon.glyphicon-arrow-left
           .col-md-2
             %center
               .dashboard_labels Bonus
           .col-md-2
             %center
-              %span
+              %span.bonus
                 %a.dashboard_indicator_off.glyphicon.glyphicon-arrow-right
     .col-md-4
       %center
@@ -100,6 +103,9 @@
           .col-md-1
             %center
               #visit_fouls.indicator_small 0
+          .col-md-1
+            .btn-group-xs
+              %button.reset_fouls.btn.btn-default.glyphicon.glyphicon-refresh
 .container-fluid{style: "background-color: black; margin-top: 120px;"}
   .row
     .col-md-6#home_players_in
@@ -309,6 +315,14 @@
     }
   });
 
+  $('.reset_fouls').on('click', function(e){
+    if(confirm("Reset foul counters?")){
+      homeFouls = 0;
+      visitFouls = 0;
+      $('#visit_fouls, #home_fouls').text('0')
+    }
+  })
+
   $('.horn').on('click', function(e){
     snd.currentTime = 6;
     snd.play();
@@ -318,6 +332,29 @@
             clearInterval(int);
         }
     }, 10);
+  })
+
+  function toggleIndicator(e){
+    if(e.hasClass('dashboard_indicator_on')){
+      e.removeClass('dashboard_indicator_on')
+      e.addClass('dashboard_indicator_off')
+    } else {
+      e.removeClass('dashboard_indicator_off')
+      e.addClass('dashboard_indicator_on')
+    }
+  }
+
+  $('span>a[class*="glyphicon-arrow"]').on('click', function(e){
+    if($(this).parent().hasClass('bonus')){
+      $('.bonus>a').each(function(obj, i){
+        toggleIndicator($(this))
+      })
+    }
+    if($(this).parent().hasClass('poss')){
+      $('.poss>a').each(function(obj, i){
+        toggleIndicator($(this))
+      })
+    }
   })
 
   $('.add_home_player_foul').on('click', function(){
@@ -386,6 +423,7 @@
     }
   })
 
+  //Change player
   $('.glyphicon-retweet').on('click', function(){
     var player_out = $(this).attr('data-player-id')
     var modalObj= $('.bs-example-modal-lg .modal-body table')

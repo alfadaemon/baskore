@@ -7,6 +7,7 @@
       %th Home
       %th Visit
       %th Game date
+      %th Round
       %th Home score
       %th Visit score
       %th
@@ -20,6 +21,7 @@
         %td= game.home.name
         %td= game.visit.name
         %td= game.game_date
+        %td= game.round.name
         %td= game.home_score
         %td= game.visit_score
         %td= link_to 'Show', game_dashboard_path(game.id)
