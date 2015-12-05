@@ -9,7 +9,10 @@ class GameLogsController < ApplicationController
 
   def game
     @game_logs = GameLog.where(game_id: params[:game_id])
+    @game_points = GameLog.select(:game_id, :player_id, :event, 'SUM(count) as count').where(game_id: params[:game_id], event: GameLog::POINTS).group(:player_id)#.sum(:count)
+
     respond_to do |format|
+      format.html { }
       format.json { render :game}
     end
   end

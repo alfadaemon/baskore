@@ -14,11 +14,13 @@
               T.O.L.:
           .col-md-1
             %center
-              .indicator_small 0
+              .indicator_small
+                #homeTO
+                  2
           .col-md-3
             .btn-group-xs
-              %button.btn.btn-default -
-              %button.btn.btn-default +
+              %button.btn.btn-default.subHomeTO -
+              %button.btn.btn-default.addHomeTO +
           .col-md-2
             %center.dashboard_labels
               Fouls:
@@ -43,7 +45,7 @@
               %button.btn.btn-default.minus_period -
               %button.btn.btn-default.plus_period +
         .row
-          .col-md-12
+          .col-md-12{style:'display:none'}
             .clock#timer 10:00
             %button.minus_sec
               %span.glyphicon.glyphicon-step-backward.controls
@@ -96,11 +98,13 @@
               T.O.L.:
           .col-md-1
             %center
-              .indicator_small 0
+              .indicator_small
+                #visitTO
+                  2
           .col-md-3
             .btn-group-xs
-              %button.btn.btn-default -
-              %button.btn.btn-default +
+              %button.btn.btn-default.subVisitTO -
+              %button.btn.btn-default.addVisitTO +
           .col-md-2
             %center.dashboard_labels
               Fouls:
@@ -240,8 +244,8 @@
   var currentPeriod = 1;
   var homeFouls = 0;
   var visitFouls = 0;
-  var homeTO = 0;
-  var visitTO = 0;
+  var homeTO = 2;
+  var visitTO = 2;
   var homePoints = 0;
   var visitPoints = 0;
   var Players = {}
@@ -649,4 +653,32 @@
         })
       }
     })
+  })
+
+  $('.addHomeTO').on('click', function(e){
+    homeTO ++;
+    var hto = $('#homeTO')
+    hto.text(homeTO.toString())
+  })
+
+  $('.subHomeTO').on('click', function(e){
+    if(homeTO>0){
+      homeTO --;
+      var hto = $('#homeTO')
+      hto.text(homeTO.toString())
+    }
+  })
+
+  $('.addVisitTO').on('click', function(e){
+    visitTO ++;
+    var hto = $('#visitTO')
+    hto.text(visitTO.toString())
+  })
+
+  $('.subVisitTO').on('click', function(e){
+    if(visitTO>0){
+      visitTO --;
+      var hto = $('#visitTO')
+      hto.text(visitTO.toString())
+    }
   })

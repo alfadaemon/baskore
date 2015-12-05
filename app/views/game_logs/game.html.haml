@@ -1,0 +1,21 @@
+%h1= @game_points.first.game.name
+/%h2= @game_points.first.game.tournament.name
+
+%table.table.table-bordered.table-striped
+  %thead
+    %tr
+      %th Team
+      %th Player
+      %th Event
+      %th Count
+
+  %tbody
+    - @game_points.each do |game_point|
+      %tr
+        %td= game_point.player.team.name
+        %td= game_point.player.name
+        %td= game_point.name
+        %td= game_point.count
+%br
+
+= link_to 'New Game log', new_game_log_path
